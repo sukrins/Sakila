@@ -7,6 +7,7 @@ package edu.iit.sat.itmd4515.sukrins.mp2.service;
 
 import edu.iit.sat.itmd4515.sukrins.mp2.model.Customer;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -29,6 +30,10 @@ public class CustomerService {
     @Resource(lookup = "jdbc/sshres14Mp2DS")
     private DataSource ds;
 
+    /**
+     *
+     * @return
+     */
     public List<Customer> findAll() {
 
         List<Customer> customers = new ArrayList<>();
@@ -61,4 +66,38 @@ public class CustomerService {
         
         return customers;
     }
+    
+    /*
+     * Find a customer by their id.
+    */
+    
+    public Customer findByID(Long id){
+    
+         // try with resources that Connectino c is ALWAYS closed
+        try (Connection c = ds.getConnection()) {
+
+            // JDBC has both Statement and PreparedStatement
+           PreparedStatement ps = c.prepareStatement("select * from customer where customer_id = ?");
+           ps.setLong(1, id);
+           
+           ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){
+            return new Customer(
+                        rs.getLong("customer_id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("email"));
+            }
+
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    
+    }
+    
+    
+    
 }

@@ -5,17 +5,40 @@
  */
 package edu.iit.sat.itmd4515.sukrins.mp2.model;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  *
  * @author sukrins
  */
 public class Customer {
-
+    
+    @NotNull()
+    @Min(value = 10, message = "Customer ID must be within 1- and 99999")
+    @Max(value = 99999, message = "Customer ID must be within 1- and 99999")
     private Long id;
+    
+    @Size(max = 45)
+    @NotNull
     private String firstName;
+    
+    @Size(max = 45)
+    @NotNull(message = "Customer last name can not be null.")
     private String lastName;
+    
+    @Size(max = 50)
     private String email;
 
+    /**
+     *
+     * @param id
+     * @param firstName
+     * @param lastName
+     * @param email
+     */
     public Customer(Long id, String firstName, String lastName, String email) {
         this.id = id;
         this.firstName = firstName;

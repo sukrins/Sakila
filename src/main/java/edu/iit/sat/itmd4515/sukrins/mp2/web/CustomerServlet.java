@@ -9,19 +9,30 @@ import edu.iit.sat.itmd4515.sukrins.mp2.model.Customer;
 import edu.iit.sat.itmd4515.sukrins.mp2.service.CustomerService;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Set;
+import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 
 /**
  *
  * @author sukrins
  */
-@WebServlet(name = "CustomerServlet", urlPatterns = {"/CustomerServlet"})
+@WebServlet(name = "CustomerServlet", urlPatterns = {"/Customer"})
 public class CustomerServlet extends HttpServlet {
+
+    private static final Logger LOG = Logger.getLogger(CustomerServlet.class.getName());
+
+    @Resource
+    Validator validator;
 
     @EJB
     CustomerService svc;
@@ -39,7 +50,6 @@ public class CustomerServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
@@ -49,13 +59,13 @@ public class CustomerServlet extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet CustomerServlet at " + request.getContextPath() + "</h1>");
-            
+
             out.println("<ol>");
-            for(Customer c : svc.findAll()){
+            for (Customer c : svc.findAll()) {
                 out.println("<li>" + c.toString() + "</li>");
             }
             out.println("</ol");
-            
+
             out.println("</body>");
             out.println("</html>");
         }
@@ -73,7 +83,9 @@ public class CustomerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        LOG.info("Inside doGet method. ");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/pages/customer.jsp");
+        dispatcher.forward(request, response);
     }
 
     /**
@@ -87,7 +99,43 @@ public class CustomerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        LOG.info("Inside doGet method");
+
+        Long customerID = null;
+
+        if (!WebUtil.isEmpty(request.getParameter("customerId"))) {
+            customerID = Long.parseLong(WebUtil.trimParam(request.getParameter("customerId")));
+        }
+
+        String firstName = WebUtil.trimParam(request.getParameter("firstName"));
+        String lastName = WebUtil.trimParam(request.getParameter("lastName"));
+        String email = WebUtil.trimParam(request.getParameter("email"));
+
+        Customer c = new Customer(customerID, firstName, lastName, email);
+
+        Set<ConstraintViolation<Customer>> violations = validator.validate(c);
+
+        if (violations.isEmpty()) {
+            LOG.info("Received the following customer from user form:\t" + c.toString());
+            response.sendRedirect("customer");
+        } else {
+            LOG.info("There are" + violations.size() + " violations.");
+
+            for (ConstraintViolation<Customer> violation : violations) {
+                LOG.info("##### " + violation.getRootBeanClass().getSimpleName()
+                        + ", " + violation.getPropertyPath() + " failed violations:\t"
+                        + violation.getInvalidValue() + " failed with message:\t"
+                        + violation.getMessage());
+            }
+
+            request.setAttribute("violations", violations);
+            request.setAttribute("customer", c);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/pages/customer.jsp");
+            dispatcher.forward(request, response);
+
+        }
+
     }
 
     /**
