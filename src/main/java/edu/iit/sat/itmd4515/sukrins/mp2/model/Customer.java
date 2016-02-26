@@ -17,12 +17,12 @@ import javax.validation.constraints.Size;
 public class Customer {
     
     @NotNull()
-    @Min(value = 10, message = "Customer ID must be within 1- and 99999")
-    @Max(value = 99999, message = "Customer ID must be within 1- and 99999")
+    @Min(value = 10, message = "Customer ID must be within 10 and 99999")
+    @Max(value = 99999, message = "Customer ID must be within 10 and 99999")
     private Long id;
     
     @Size(max = 45)
-    @NotNull
+    @NotNull(message = "Customer first name can not be null.")
     private String firstName;
     
     @Size(max = 45)

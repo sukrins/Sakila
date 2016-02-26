@@ -63,27 +63,32 @@ public class CustomerService {
         } else {
             return customers;
         }*/
-        
         return customers;
     }
-    
+
     /*
      * Find a customer by their id.
-    */
-    
-    public Customer findByID(Long id){
-    
-         // try with resources that Connectino c is ALWAYS closed
+     */
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+
+    public Customer findByID(Long id) {
+
+        // try with resources that Connectino c is ALWAYS closed
         try (Connection c = ds.getConnection()) {
 
             // JDBC has both Statement and PreparedStatement
-           PreparedStatement ps = c.prepareStatement("select * from customer where customer_id = ?");
-           ps.setLong(1, id);
-           
-           ResultSet rs = ps.executeQuery();
-            
-            if(rs.next()){
-            return new Customer(
+            PreparedStatement ps = c.prepareStatement("select * from customer where customer_id = ?");
+            ps.setLong(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new Customer(
                         rs.getLong("customer_id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
@@ -93,11 +98,79 @@ public class CustomerService {
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
-        
+
         return null;
-    
+
     }
-    
-    
-    
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    public boolean delete(Long id) {
+        try (Connection c = ds.getConnection()) {
+
+            PreparedStatement preparedStatement = c.prepareStatement("delete from customer where customer_id= ? ");
+            // Parameters start with 1
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+
+    /**
+     *
+     * @param customer
+     * @return
+     */
+    public boolean save(Customer customer) {
+
+        String updateSql = "update customer set "
+                + "first_name=?, "
+                + "last_name=?, "
+                + "email=? "
+                + "where customer_id=?";
+
+        String insertSql = "insert into customer("
+                + "customer_id,"
+                + "first_name,"
+                + "last_name,"
+                + "email,";
+
+        int returnVal = 0;
+
+        try (Connection c = ds.getConnection()) {
+
+            PreparedStatement ps = c.prepareStatement(updateSql);
+            ps.setString(1, customer.getFirstName());
+            ps.setString(2, customer.getLastName());
+            ps.setString(3, customer.getEmail());
+            ps.setLong(4, customer.getId());
+
+            LOG.info("Updating a new record " + customer.toString());
+            returnVal = ps.executeUpdate();
+
+            // if nothing was updated, that means we need to insert
+            if (returnVal == 0) {
+                LOG.info("Nothing to update.  Inserting a new record " + customer.toString());
+                ps = c.prepareStatement(insertSql);
+                ps.setLong(1, customer.getId());
+                ps.setString(2, customer.getFirstName());
+                ps.setString(3, customer.getLastName());
+                ps.setString(4, customer.getEmail());
+                returnVal = ps.executeUpdate();
+            }
+
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            return false;
+        }
+
+        return returnVal > 0;
+    }
+
 }

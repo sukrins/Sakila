@@ -11,6 +11,11 @@ package edu.iit.sat.itmd4515.sukrins.mp2.web;
  */
 public class WebUtil {
 
+    /**
+     *
+     * @param param
+     * @return
+     */
     public static boolean isEmpty(String param) {
         if ((param == null) || (param.trim().equals(""))) {
             return true;
@@ -19,6 +24,11 @@ public class WebUtil {
         }
     }
 
+    /**
+     *
+     * @param param
+     * @return
+     */
     public static String trimParam(String param) {
         if (isEmpty(param)) {
             return null;
