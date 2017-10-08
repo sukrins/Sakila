@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.iit.sat.itmd4515.sukrins.mp2.service;
+package edu.iit.sat.itmd4515.sukrins.sakila.service;
 
-import edu.iit.sat.itmd4515.sukrins.mp2.model.Customer;
+import edu.iit.sat.itmd4515.sukrins.sakila.model.Customer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
