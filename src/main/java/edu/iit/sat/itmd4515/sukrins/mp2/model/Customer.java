@@ -15,22 +15,23 @@ import javax.validation.constraints.Size;
  * @author sukrins
  */
 public class Customer {
-    
+
     @NotNull()
     @Min(value = 10, message = "Customer ID must be within 10 and 99999")
     @Max(value = 99999, message = "Customer ID must be within 10 and 99999")
     private Long id;
-    
+
     @Size(max = 45)
     @NotNull(message = "Customer first name can not be null.")
     private String firstName;
-    
+
     @Size(max = 45)
     @NotNull(message = "Customer last name can not be null.")
     private String lastName;
-    
+
     @Size(max = 50)
     private String email;
+
 
     /**
      *
@@ -44,7 +45,7 @@ public class Customer {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-    }
+    }    
 
     /**
      * Get the value of lastName
@@ -123,4 +124,6 @@ public class Customer {
         return "Customer{" + "id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + '}';
     }
 
+     
+    
 }

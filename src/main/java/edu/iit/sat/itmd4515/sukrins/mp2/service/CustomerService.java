@@ -14,6 +14,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.sql.DataSource;
@@ -52,6 +53,7 @@ public class CustomerService {
                         rs.getString("first_name"),
                         rs.getString("last_name"),
                         rs.getString("email")));
+
             }
 
         } catch (SQLException ex) {
@@ -69,13 +71,11 @@ public class CustomerService {
     /*
      * Find a customer by their id.
      */
-
     /**
      *
      * @param id
      * @return
      */
-
     public Customer findByID(Long id) {
 
         // try with resources that Connectino c is ALWAYS closed
@@ -108,7 +108,7 @@ public class CustomerService {
      * @param id
      * @return
      */
-    public boolean delete(Long id) {
+    public void delete(Long id) {
         try (Connection c = ds.getConnection()) {
 
             PreparedStatement preparedStatement = c.prepareStatement("delete from customer where customer_id= ? ");
@@ -119,27 +119,47 @@ public class CustomerService {
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
-        return true;
     }
 
-    /**
-     *
-     * @param customer
-     * @return
-     */
+    public boolean create(Customer customer) {
+        String insertSql = "insert into customer("
+                + "customer_id,"
+                + "first_name,"
+                + "last_name,"
+                + "email,"
+                + " values(?,?,?,?)";
+        try (Connection c = ds.getConnection()) {
+
+            PreparedStatement ps = c.prepareStatement(insertSql);
+            ps.setString(1, customer.getFirstName());
+            ps.setString(2, customer.getLastName());
+            ps.setString(3, customer.getEmail());
+            ps.setLong(3, customer.getId());
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+        /**
+         *
+         * @param customer
+         * @return
+         */
     public boolean save(Customer customer) {
+
+        String insertSql = "insert into customer("
+                + "customer_id,"
+                + "first_name,"
+                + "last_name,"
+                + "email,"
+                + " values(?,?,?,?)";
 
         String updateSql = "update customer set "
                 + "first_name=?, "
                 + "last_name=?, "
                 + "email=? "
                 + "where customer_id=?";
-
-        String insertSql = "insert into customer("
-                + "customer_id,"
-                + "first_name,"
-                + "last_name,"
-                + "email,";
 
         int returnVal = 0;
 

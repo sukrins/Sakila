@@ -27,7 +27,7 @@
 </c:if>
 
 <c:if test="${not empty requestScope.messages}">
-    <h2>Violations were found in my controller! (and passed back in the request scope)</h2>
+    <h2></h2>
     <ul>
         <c:forEach items="${requestScope.messages}" var="message">
             <li>
@@ -36,14 +36,13 @@
         </c:forEach>
     </ul>
 </c:if>
-
 <table class="table table-hover">
     <thead>
         <tr>
             <th>Customer ID</th>
             <th>Customer First Name</th>
             <th>Customer Last Name</th>
-            <th>Customer Email</th>
+            <th>Customer Email</th>       
         </tr>
     </thead>
     <tbody>
@@ -53,8 +52,8 @@
                 <td>${customer.firstName}</td>
                 <td>${customer.lastName}</td>
                 <td>${customer.email}</td>                     
-                 <td>
-                    <a href="<c:url value="/customer">
+                <td>
+                    <a href="<c:url value="/readOnly">
                            <c:param name="customerId" value="${customer.id}"/>
                        </c:url>">Details (Read/Only)</a>
                 </td>
@@ -63,7 +62,7 @@
                            <c:param name="customerId" value="${customer.id}"/>
                        </c:url>">Update</a>
                 </td>
-                 <td>
+                <td>
                     <a href="<c:url value="/customer">
                            <c:param name="customerId" value="${customer.id}"/>
                        </c:url>">Delete</a>

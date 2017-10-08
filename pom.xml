@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>edu.iit.sat.itmd4515.sukrins</groupId>
-    <artifactId>sukrins-MP2</artifactId>
+    <artifactId>sukrins-Sakila</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>sukrins-MP2</name>
+    <name>sukrins-Sakila</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>

@@ -26,31 +26,30 @@
     </ul>
 </c:if>
 
-
-<form method="POST" action="<c:url value="/customer"/>">
+<form method="POST" action="<c:url value="/readOnly"/>">
     <fieldset>
         <p>
         <legend>Customer's information:</legend>
         </p>
         <div>
             <label for="customerId">Customer ID:<br /> 
-                <input type="number" name="customerId" id="customerId" value="${customer.id}" style="width: 300px"><br />
+            <input type="number" name="customerId" id="customerId" value="${customer.id}" style="width: 300px" disabled><br />
         </div>
         <div>
             <label for="firstName">Customer First Name:<br />
-                <input type="text" name="firstName" id="firstName" value="${customer.firstName}" style="width: 300px"><br />
+            <input type="text" name="firstName" id="firstName" value="${customer.firstName}" style="width: 300px" disabled><br />
         </div>
         <div>
             <label for="lastName">Customer Last Name:<br />
-                <input type="text" name="lastName" id="lastName" value="${customer.lastName}" style="width: 300px"><br />
+            <input type="text" name="lastName" id="lastName" value="${customer.lastName}" style="width: 300px" disabled><br />
         </div>
         <div>
             <label for="email">Customer Email:<br />
-                <input type="email" name="email" id="email" value="${customer.email}" style="width: 300px"><br />
+            <input type="email" name="email" id="email" value="${customer.email}" style="width: 300px" disabled><br />
         </div>
-        <input type="submit" name="submitCustomer" id="submitCustomer">
-        <input type="submit" name="deleteCustomer" id="deleteCustomer" value="Delete">
+         
+        
+    </fieldset>
+</form>
 
-        </form>
-
-        <%@include file="/WEB-INF/jspf/footer.jspf" %>
+<%@include file="/WEB-INF/jspf/footer.jspf" %>

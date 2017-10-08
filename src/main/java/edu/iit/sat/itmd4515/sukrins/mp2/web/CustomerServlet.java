@@ -30,7 +30,7 @@ import javax.validation.Validator;
  */
 @WebServlet(name = "CustomerServlet",
         urlPatterns = {"/customer",
-            "/customers"})
+            "/customers", "/readOnly"})
 public class CustomerServlet extends HttpServlet {
 
     private static final Logger LOG = Logger.getLogger(CustomerServlet.class.getName());
@@ -69,6 +69,17 @@ public class CustomerServlet extends HttpServlet {
                     request.setAttribute("customer", c);
                 }
                 request.getRequestDispatcher("/WEB-INF/pages/customer.jsp").forward(request, response);
+
+                break;
+
+            case "/readOnly":
+                LOG.info("GET request to /readOnly");
+                if (!WebUtil.isEmpty(request.getParameter("customerId"))) {
+                    Long customerId = Long.parseLong(WebUtil.trimParam(request.getParameter("customerId")));
+                    Customer c = svc.findByID(customerId);
+                    request.setAttribute("customer", c);
+                }
+                request.getRequestDispatcher("/WEB-INF/pages/readOnly.jsp").forward(request, response);
 
                 break;
         }
@@ -112,32 +123,20 @@ public class CustomerServlet extends HttpServlet {
 
             //TODO
             if (svc.save(c)) {
-
                 messages.put("sucess", "Successfully saved customer");
                 request.setAttribute("customers", svc.findAll());
                 request.getRequestDispatcher("/WEB-INF/pages/customers.jsp").forward(request, response);
+            } else if (request.getParameter("deleteCustomer").contains("Delete")) {
+                svc.delete(c.getId());
+                messages.put("sucess", "Successfully deleted customer");
+                request.setAttribute("customers", svc.findAll());
+                request.getRequestDispatcher("/WEB-INF/pages/customers.jsp").forward(request, response);
             }
-        } else if (violations.size() == 1) {
-            LOG.info("There is " + violations.size() + " violation.");
-
-            for (ConstraintViolation<Customer> violation : violations) {
-                LOG.info("##### " + violation.getRootBeanClass().getSimpleName()
-                        + ", " + violation.getPropertyPath() + " failed violation:\t"
-                        + violation.getInvalidValue() + " failed with message:\t"
-                        + violation.getMessage());
-
-                request.setAttribute("violations", violations);
-                request.setAttribute("customer", c);
-
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/pages/customer.jsp");
-                dispatcher.forward(request, response);
-            }
-
         } else {
             LOG.info("There are " + violations.size() + " violations.");
 
             for (ConstraintViolation<Customer> violation : violations) {
-                LOG.info("##### " + violation.getRootBeanClass().getSimpleName()
+                LOG.info("#### " + violation.getRootBeanClass().getSimpleName()
                         + ", " + violation.getPropertyPath() + " failed violations:\t"
                         + violation.getInvalidValue() + " failed with message:\t"
                         + violation.getMessage());
@@ -147,7 +146,6 @@ public class CustomerServlet extends HttpServlet {
             request.setAttribute("customer", c);
 
             request.getRequestDispatcher("/WEB-INF/pages/customer.jsp").forward(request, response);
-
         }
 
     }

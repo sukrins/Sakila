@@ -36,7 +36,7 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li class=""><a href="http://localhost:8080/sukrins-MP2">Home</a></li>
-                        <li class=""><a href="http://localhost:8080/sukrins-MP2/customer">Customer</a></li>
+                        <li class=""><a href="http://localhost:8080/sukrins-MP2/customer">Create</a></li>
                         <li class=""><a href="http://localhost:8080/sukrins-MP2/customers">Table</a></li>
                       
                     </ul>

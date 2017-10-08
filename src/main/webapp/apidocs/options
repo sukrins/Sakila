@@ -1,0 +1,24 @@
+-classpath
+'/Users/sukrins/.m2/repository/org/hibernate/hibernate-validator/5.2.3.Final/hibernate-validator-5.2.3.Final.jar:/Users/sukrins/.m2/repository/mysql/mysql-connector-java/5.1.38/mysql-connector-java-5.1.38.jar:/Users/sukrins/.m2/repository/javax/javaee-web-api/7.0/javaee-web-api-7.0.jar:/Users/sukrins/.m2/repository/com/fasterxml/classmate/1.1.0/classmate-1.1.0.jar:/Users/sukrins/.m2/repository/javax/validation/validation-api/1.1.0.Final/validation-api-1.1.0.Final.jar:/Users/sukrins/.m2/repository/org/jboss/logging/jboss-logging/3.2.1.Final/jboss-logging-3.2.1.Final.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/Users/sukrins/NetBeansProjects/sukrins-MP2/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2016. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/Users/sukrins/NetBeansProjects/sukrins-MP2/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'sukrins-MP2 1.0-SNAPSHOT API'
+-linkoffline
+'http://docs.oracle.com/javase/7/docs/api' '/Users/sukrins/NetBeansProjects/sukrins-MP2/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'sukrins-MP2 1.0-SNAPSHOT API'
